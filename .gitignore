@@ -1,0 +1,29 @@
+# Bausteine & Build
+node_modules/
+dist/
+coverage/
+*.log
+
+# PERSÖNLICHE DATEN – niemals hochladen
+*.mein-alltag.json
+*.mein-alltag.enc.json
+backup/
+Sicherungen/
+privat/
+*.jpg
+*.jpeg
+*.heic
+*.pdf
+!public/**/*.png
+
+# Editor/System
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+.env*
+
+# Persönliche Planungs- und Anleitungsdokumente bleiben nur lokal (OneDrive)
+KONZEPT.md
+STATUS.md
+ANLEITUNG.md
