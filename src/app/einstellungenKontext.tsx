@@ -16,7 +16,7 @@ export function EinstellungenAnbieter({ children }: { children: ReactNode }) {
     const dunkel =
       einstellungen.design === 'dunkel' ||
       (einstellungen.design === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dunkel ? '#1c1a18' : '#5B7F6A');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dunkel ? '#1c1a18' : '#2DBE5C');
   }, [einstellungen.design, einstellungen.schriftgroesse]);
 
   return <Kontext.Provider value={einstellungen}>{children}</Kontext.Provider>;

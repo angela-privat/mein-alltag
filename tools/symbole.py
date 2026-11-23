@@ -6,7 +6,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 ZIEL = Path(__file__).resolve().parent.parent / "public" / "icons"
-GRUEN = "#5B7F6A"
+GRUEN = "#2DBE5C"
 CREME = "#FAF6F0"
 TERRA = "#C8664B"
 S = 4  # Überabtastung für weiche Kanten
