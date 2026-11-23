@@ -16,6 +16,8 @@ export interface Wiederholung {
   intervall: number;
   wochentage?: number[];
   bis?: string;
+  /** Erstes Datum der Reihe ("JJJJ-MM-TT"), damit z. B. „jeden 31.“ nicht wandert. */
+  anker?: string;
 }
 
 // 7.1 Aufgaben & Kalender
@@ -29,17 +31,22 @@ export interface Aufgabe extends Basis {
   erledigtAm?: string;
   wiederholung?: Wiederholung;
   unteraufgaben: { id: string; titel: string; erledigt: boolean }[];
+  /** Erinnerung so viele Minuten vor der Fälligkeit (fehlt = keine Erinnerung). */
+  erinnerungMinuten?: number;
 }
 
 export interface Termin extends Basis {
   titel: string;
   ort?: string;
+  /** "JJJJ-MM-TT" (ganztägig) oder "JJJJ-MM-TTTHH:MM" (Ortszeit). */
   beginn: string;
+  /** Uhrzeit-Termin: Ende am selben Tag "JJJJ-MM-TTTHH:MM"; ganztägig: letzter Tag "JJJJ-MM-TT". */
   ende?: string;
   ganztaegig: boolean;
   farbe?: string;
   wiederholung?: Wiederholung;
   notiz?: string;
+  erinnerungMinuten?: number;
 }
 
 export interface Kategorie extends Basis {
@@ -194,10 +201,14 @@ export interface Datei extends Basis {
 export interface Erinnerung extends Basis {
   bezug: { typ: 'aufgabe' | 'termin' | 'haushalt' | 'dauerauftrag' | 'datei' | 'frei'; id?: string };
   text: string;
+  /** Ortszeit "JJJJ-MM-TTTHH:MM". */
   zeitpunkt: string;
+  /** Nur bei freien Erinnerungen; Termin-Erinnerungen folgen der Wiederholung des Termins. */
   wiederholung?: Wiederholung;
   status: 'offen' | 'gezeigt' | 'erledigt' | 'verschoben';
   imKalenderExportiert: boolean;
+  /** Bei Terminen: Beginn des Vorkommens, zu dem diese Erinnerung gehört. */
+  vorkommen?: string;
 }
 
 // 7.8 Assistent & Einstellungen

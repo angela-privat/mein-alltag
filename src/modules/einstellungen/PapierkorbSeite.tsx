@@ -8,6 +8,8 @@ import {
   endgueltigLoeschen, papierkorbLaden, papierkorbLeeren, PAPIERKORB_TAGE, wiederherstellen, type PapierkorbEintrag
 } from '../../db/basis';
 import { TABELLEN_NAMEN } from '../../db/datenbank';
+import { aufgabeWiederherstellen } from '../../db/aufgaben';
+import { terminWiederherstellen } from '../../db/termine';
 
 export function PapierkorbSeite() {
   const eintraege = useLiveQuery(papierkorbLaden);
@@ -48,7 +50,10 @@ export function PapierkorbSeite() {
                     className="knopf zweitrangig klein"
                     aria-label={`„${e.titel}“ wiederherstellen`}
                     onClick={async () => {
-                      await wiederherstellen(e.tabelle, e.id);
+                      // Aufgaben/Termine bekommen dabei ihre Erinnerung zurück
+                      if (e.tabelle === 'aufgaben') await aufgabeWiederherstellen(e.id);
+                      else if (e.tabelle === 'termine') await terminWiederherstellen(e.id);
+                      else await wiederherstellen(e.tabelle, e.id);
                       melden({ text: `„${e.titel}“ ist wieder da.` });
                     }}
                   >

@@ -216,7 +216,7 @@ a { color: var(--haupt-dunkel); }
 .feld { display: block; margin-bottom: 16px; }
 .feld > span { display: block; font-weight: 600; margin-bottom: 6px; }
 .feld small { display: block; color: var(--text-leise); margin-top: 4px; }
-input[type='text'], input[type='number'], input[type='password'], select, textarea {
+input[type='text'], input[type='number'], input[type='password'], input[type='date'], input[type='time'], select, textarea {
   width: 100%; min-height: 48px; padding: 10px 14px;
   font: inherit; color: var(--text);
   background: var(--flaeche); border: 1px solid var(--linie); border-radius: var(--radius-klein);
@@ -301,3 +301,115 @@ dialog .knopfreihe { justify-content: flex-end; margin-top: 16px; }
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .version { text-align: center; color: var(--text-leise); font-size: 0.85rem; margin-top: 24px; }
+
+/* ===== Phase 3: Aufgaben, Kalender, Erinnerungen ===== */
+textarea { min-height: 96px; resize: vertical; }
+input[type='date'], input[type='time'] { appearance: none; -webkit-appearance: none; }
+.zwei-spalten { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.zwei-spalten .feld { margin-bottom: 16px; }
+
+.reiter {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; margin-bottom: 16px;
+  background: var(--flaeche-2); border-radius: 24px;
+}
+.reiter a {
+  display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px;
+  border-radius: 20px; color: var(--text-leise); font-weight: 650; text-decoration: none;
+}
+.reiter a.active { background: var(--flaeche); color: var(--haupt-dunkel); box-shadow: var(--schatten); }
+
+.fab {
+  position: fixed; z-index: 25; right: max(16px, calc(50vw - 304px));
+  bottom: calc(var(--leiste-hoehe) + 16px + env(safe-area-inset-bottom));
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 60px; height: 60px; padding: 0 20px; border-radius: 30px; border: none;
+  background: var(--haupt); color: var(--auf-haupt); font: inherit; font-weight: 700;
+  box-shadow: 0 6px 18px rgb(46 42 38 / 25%); text-decoration: none; cursor: pointer;
+}
+.fab:active { transform: scale(0.97); }
+.platz-fuer-fab { height: 72px; }
+/* Meldung über den „+“-Knopf schieben, damit er sichtbar bleibt */
+body:has(.fab) .meldung { bottom: calc(var(--leiste-hoehe) + 88px + env(safe-area-inset-bottom)); }
+
+.abschnitt { display: flex; align-items: baseline; gap: 8px; margin: 20px 4px 8px; }
+.abschnitt h2 { margin: 0; font-size: 1rem; }
+.abschnitt .anzahl { color: var(--text-leise); font-size: 0.9rem; font-weight: 600; }
+.abschnitt.warnung h2 { color: var(--akzent); }
+
+.schnell { display: flex; gap: 8px; }
+.schnell input { flex: 1; }
+.schnell .knopf { flex-shrink: 0; width: 48px; padding: 0; }
+.chips { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.chips button {
+  min-height: 40px; padding: 4px 14px; border-radius: 20px; font: inherit; font-size: 0.9rem; font-weight: 600;
+  background: var(--flaeche); color: var(--text-leise); border: 1px solid var(--linie); cursor: pointer;
+}
+.chips button[aria-pressed='true'] { background: var(--haupt-hell); color: var(--haupt-dunkel); border-color: var(--haupt); }
+
+.aufgabe { display: flex; align-items: center; gap: 4px; }
+.aufgabe .zeile { padding-left: 0; }
+.abhaken {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; margin-left: -6px; border: none; background: none; cursor: pointer; color: var(--haupt);
+}
+.abhaken .kreis {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--haupt); color: transparent;
+}
+.abhaken[aria-pressed='true'] .kreis { background: var(--haupt); color: var(--auf-haupt); }
+.abhaken.hoch .kreis { border-color: var(--akzent); }
+.erledigt-text { text-decoration: line-through; color: var(--text-leise); }
+.merkmale, .zeile .text small.merkmale { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.merkmale span { display: inline-flex; align-items: center; gap: 3px; }
+.merkmale .ueberfaellig { color: var(--akzent); font-weight: 600; }
+.merkmale .wichtig { color: var(--akzent); font-weight: 700; }
+
+details.karte > summary { cursor: pointer; font-weight: 650; min-height: 32px; list-style-position: inside; }
+details.karte[open] > summary { margin-bottom: 8px; }
+
+.unteraufgaben { list-style: none; margin: 0 0 8px; padding: 0; }
+.unteraufgaben li { display: flex; align-items: center; gap: 4px; border-bottom: 1px solid var(--linie); }
+.unteraufgaben li span { flex: 1; }
+.symbolknopf {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 48px; height: 48px; border: none; border-radius: 50%; background: none; color: var(--text-leise); cursor: pointer;
+}
+.symbolknopf:active { background: var(--flaeche-2); }
+
+.wochentage { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.wochentage button {
+  min-height: 44px; border-radius: var(--radius-klein); font: inherit; font-weight: 650; font-size: 0.85rem;
+  background: var(--flaeche); color: var(--text); border: 1px solid var(--linie); cursor: pointer; padding: 0;
+}
+.wochentage button[aria-pressed='true'] { background: var(--haupt); color: var(--auf-haupt); border-color: var(--haupt); }
+
+/* Kalender */
+.kal-leiste { display: flex; align-items: center; gap: 4px; margin-bottom: 12px; }
+.kal-leiste h2 { flex: 1; margin: 0; text-align: center; font-size: 1.05rem; }
+.monat { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.monat .wt { font-size: 0.75rem; font-weight: 700; color: var(--text-leise); padding: 4px 0; }
+.monat button {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px;
+  min-height: 52px; padding: 6px 0 4px; border: none; border-radius: var(--radius-klein);
+  background: none; color: var(--text); font: inherit; font-size: 0.95rem; cursor: pointer;
+}
+.monat button.fremd { color: var(--text-leise); opacity: 0.55; }
+.monat button.heute .zahl { background: var(--haupt-hell); color: var(--haupt-dunkel); font-weight: 750; }
+.monat button[aria-pressed='true'] .zahl { background: var(--haupt); color: var(--auf-haupt); font-weight: 750; }
+.monat .zahl { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; }
+.monat .punkte { display: flex; gap: 3px; height: 6px; }
+.monat .punkte i { width: 6px; height: 6px; border-radius: 50%; background: var(--m-erinnerungen); }
+.monat .punkte i.aufg { background: var(--haupt); }
+
+.tagkopf { font-weight: 700; margin: 0; padding: 12px 4px 4px; color: var(--text-leise); font-size: 0.95rem; }
+.tagkopf.heute { color: var(--haupt-dunkel); }
+.zeitspalte {
+  flex-shrink: 0; width: 64px; font-size: 0.85rem; font-weight: 650; color: var(--text-leise); text-align: left;
+  border-left: 4px solid var(--modulfarbe, var(--m-erinnerungen)); padding-left: 8px; align-self: stretch;
+  display: flex; align-items: center;
+}
+
+.erinnerung-zeile { padding: 10px 0; border-bottom: 1px solid var(--linie); }
+.erinnerung-zeile:last-child { border-bottom: none; }
+.erinnerung-zeile .knopfreihe { margin-top: 8px; }
+.verpasst { border-left: 4px solid var(--akzent); }

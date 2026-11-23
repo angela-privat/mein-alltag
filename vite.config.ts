@@ -10,6 +10,8 @@ const BASIS = '/mein-alltag/';
 
 export default defineConfig({
   base: BASIS,
+  // Die App ist eine Datei (~175 KB komprimiert) – das ist für eine Offline-App in Ordnung.
+  build: { chunkSizeWarningLimit: 800 },
   plugins: [
     react(),
     VitePWA({
@@ -40,7 +42,9 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,webmanifest}'],
         navigateFallback: BASIS + 'index.html',
-        cleanupOutdatedCaches: true
+        cleanupOutdatedCaches: true,
+        // Tippen auf eine Benachrichtigung öffnet die App (siehe public/sw-zusatz.js)
+        importScripts: ['sw-zusatz.js']
       }
     })
   ],

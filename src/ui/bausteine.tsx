@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { ChevronLeft } from 'lucide-react';
 
 /* ===== Seitenkopf ===== */
@@ -128,4 +128,14 @@ export function MeldungAnbieter({ children }: { children: ReactNode }) {
 
 export function useMeldung() {
   return useContext(MeldungKontext);
+}
+
+/** Zurück zur vorigen Seite – oder zu `ersatz`, wenn die App direkt hier geöffnet wurde. */
+export function useZurueck(ersatz: string) {
+  const navigate = useNavigate();
+  return useCallback(() => {
+    const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
+    if (idx > 0) navigate(-1);
+    else navigate(ersatz, { replace: true });
+  }, [navigate, ersatz]);
 }

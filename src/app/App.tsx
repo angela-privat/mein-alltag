@@ -12,6 +12,16 @@ import { SicherungSeite } from '../modules/einstellungen/SicherungSeite';
 import { PapierkorbSeite } from '../modules/einstellungen/PapierkorbSeite';
 import { UeberSeite } from '../modules/einstellungen/UeberSeite';
 import { MODUL_INFOS } from './module';
+import { ErinnerungsWaechter } from './ErinnerungsWaechter';
+import { AufgabenSeite } from '../modules/aufgaben/AufgabenSeite';
+import { AufgabeBearbeiten } from '../modules/aufgaben/AufgabeBearbeiten';
+import { KalenderSeite } from '../modules/aufgaben/KalenderSeite';
+import { TerminBearbeiten } from '../modules/aufgaben/TerminBearbeiten';
+import { ErinnerungenSeite } from '../modules/erinnerungen/ErinnerungenSeite';
+import { ErinnerungBearbeiten } from '../modules/erinnerungen/ErinnerungBearbeiten';
+
+/** Module, die schon gebaut sind (alle anderen zeigen „Kommt bald“). */
+const FERTIG = ['aufgaben', 'erinnerungen'];
 
 const LEISTE = [
   { pfad: '/', text: 'Heute', symbol: Sun },
@@ -38,11 +48,21 @@ export function App() {
       <MeldungAnbieter>
         <HashRouter>
           <NachOben />
+          <ErinnerungsWaechter />
           <div className="app">
             <main className="inhalt">
               <Routes>
                 <Route path="/" element={<Heute />} />
-                {MODUL_INFOS.map((m) => (
+                <Route path="/aufgaben" element={<AufgabenSeite />} />
+                <Route path="/aufgaben/neu" element={<AufgabeBearbeiten key="neu" />} />
+                <Route path="/aufgaben/kalender" element={<KalenderSeite />} />
+                <Route path="/aufgaben/termin/neu" element={<TerminBearbeiten key="neu" />} />
+                <Route path="/aufgaben/termin/:id" element={<TerminBearbeiten />} />
+                <Route path="/aufgaben/:id" element={<AufgabeBearbeiten />} />
+                <Route path="/erinnerungen" element={<ErinnerungenSeite />} />
+                <Route path="/erinnerungen/neu" element={<ErinnerungBearbeiten key="neu" />} />
+                <Route path="/erinnerungen/:id" element={<ErinnerungBearbeiten />} />
+                {MODUL_INFOS.filter((m) => !FERTIG.includes(m.schluessel)).map((m) => (
                   <Route key={m.schluessel} path={m.pfad} element={<Platzhalter modul={m.schluessel} />} />
                 ))}
                 <Route path="/mehr" element={<Mehr />} />
